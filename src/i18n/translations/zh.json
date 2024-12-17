@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "tracking_bot": "通过TG机器人追踪SM",
+    "signal_channel": "加入我们的信号频道",
+    "tg_group": "加入我们的TG群组"
+  },
+  "filters": {
+    "chad_bags": "仅查看Chad包",
+    "pause": "暂停",
+    "search_placeholder": "搜索地址...",
+    "smart_wallets": "智能钱包",
+    "time_filters": {
+      "30m": "30分钟",
+      "1h": "1小时",
+      "6h": "6小时",
+      "1d": "1天"
+    }
+  },
+  "table": {
+    "headers": {
+      "token": "代币",
+      "sm_amt": "SM数量",
+      "avg_buy": "平均买入MC",
+      "invested": "投资",
+      "sold": "售出",
+      "holders": "持有者",
+      "trade": "交易"
+    },
+    "watchlist": "来自观察列表",
+    "buy": "买入"
+  }
+}

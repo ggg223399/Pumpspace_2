@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "tracking_bot": "Tracking SM via TG Bot",
+    "signal_channel": "Join our signal channel",
+    "tg_group": "Join our TG group"
+  },
+  "filters": {
+    "chad_bags": "Chad Bags Only",
+    "pause": "PAUSE",
+    "search_placeholder": "Search by address...",
+    "smart_wallets": "Smart Wallets",
+    "time_filters": {
+      "30m": "30m",
+      "1h": "1h",
+      "6h": "6h",
+      "1d": "1d"
+    }
+  },
+  "table": {
+    "headers": {
+      "token": "Token",
+      "sm_amt": "SM Amt",
+      "avg_buy": "Avg Buy MC",
+      "invested": "Invested",
+      "sold": "Sold",
+      "holders": "Holders",
+      "trade": "Trade"
+    },
+    "watchlist": "from watchlist",
+    "buy": "Buy"
+  }
+}
