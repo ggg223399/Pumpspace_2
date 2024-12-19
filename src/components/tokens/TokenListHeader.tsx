@@ -55,20 +55,20 @@ export function TokenListHeader({
         />
         <SortableHeader
           label={t('table.headers.avg_buy')}
-          sortKey="price"
+          sortKey="avgBuyMC"
           currentSort={sortKey}
           direction={sortDirection}
           onSort={onSort}
           showFilter
-          onPresetFilter={(value) => setPresetFilter('price', value)}
-          onCustomFilter={(min, max) => setCustomFilter('price', min, max)}
+          onPresetFilter={(value) => setPresetFilter('avgBuyMC', value)}
+          onCustomFilter={(min, max) => setCustomFilter('avgBuyMC', min, max)}
           onApply={applyFilters}
-          onReset={() => resetFilter('price')}
-          isFilterActive={isFilterActive('price')}
-          currentFilter={activeFilters.price}
-          isPresetActive={(value) => isPresetActive('price', value)}
-          isPresetPending={(value) => isPresetPending('price', value)}
-          hasPendingChanges={hasPendingChanges('price')}
+          onReset={() => resetFilter('avgBuyMC')}
+          isFilterActive={isFilterActive('avgBuyMC')}
+          currentFilter={activeFilters.avgBuyMC}
+          isPresetActive={(value) => isPresetActive('avgBuyMC', value)}
+          isPresetPending={(value) => isPresetPending('avgBuyMC', value)}
+          hasPendingChanges={hasPendingChanges('avgBuyMC')}
           className="text-right"
         />
         <div className="text-right text-gray-400">{t('table.headers.invested')}</div>

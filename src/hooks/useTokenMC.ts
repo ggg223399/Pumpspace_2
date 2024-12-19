@@ -1,25 +1,32 @@
 import { useMemo } from 'react';
 import type { Signal } from '../types/signal';
-import type { Token, TokenTransaction } from '../types/token';
-import { calculateAvgBuyMC, formatMC } from '../utils/marketCap';
+import type { Token } from '../types/token';
+import { formatMC } from '../utils/marketCap';
 
 export function useTokenMC(token: Token, signals: Signal[]) {
   return useMemo(() => {
-    // Get all buy transactions for this token
-    const buyTransactions: TokenTransaction[] = signals
-      .filter(s => s.tokenAddress === token.address && s.type === 'buy')
-      .map(s => ({
-        price: parseFloat(s.price),
-        amount: parseFloat(s.tokenAmount),
-        timestamp: s.timestamp
-      }));
+    // Get all signals for this token
+    const tokenSignals = signals.filter(s => s.tokenAddress === token.address);
 
-    // Calculate average buy MC
-    const avgBuyMC = calculateAvgBuyMC(buyTransactions, token.tokenSupply);
+    if (tokenSignals.length === 0) {
+      return {
+        avgBuyMC: '0',
+        formattedAvgBuyMC: '$0'
+      };
+    }
+
+    // Calculate total market cap from buy signals only
+    const buySignals = tokenSignals.filter(s => s.type === 'buy');
+    const totalMC = buySignals.reduce((sum, signal) => {
+      return sum + (parseFloat(signal.marketCap));
+    }, 0);
+
+    // Calculate average market cap from buys
+    const avgMC = buySignals.length > 0 ? totalMC / buySignals.length : 0;
     
     return {
-      avgBuyMC,
-      formattedAvgBuyMC: formatMC(avgBuyMC)
+      avgBuyMC: avgMC.toString(),
+      formattedAvgBuyMC: formatMC(avgMC)
     };
-  }, [token, signals]);
+  }, [token.address, signals]);
 }

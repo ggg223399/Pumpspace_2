@@ -1,4 +1,4 @@
-import type { FilterConfig } from '../types/filter';
+import type { FilterConfig } from '../../types/filter';
 
 export const filterConfigs: Record<string, FilterConfig> = {
   amount: {

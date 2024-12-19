@@ -1,6 +1,8 @@
 import React from 'react';
 import { TokenListItem } from './TokenListItem';
 import type { Token } from '../../types/token';
+import type { Signal } from '../types/signal';
+
 
 interface TokenListContentProps {
   tokens: Token[];

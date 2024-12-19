@@ -21,7 +21,7 @@ const getFutureTimestamp = (index: number) => {
 
 // Generate historical signals (past 30m)
 const historicalSignals: Signal[] = Array.from({ length: 20 }, (_, index) => {
-  const token = mockTokens[index % 5]; // Only use first 5 tokens for historical data
+  const token = mockTokens[index % mockTokens.length]; // Only use first 5 tokens for historical data
   const smartMoney = mockSmartMoney[index % mockSmartMoney.length];
   const type = Math.random() > 0.5 ? 'buy' : 'sell';
   const tokenAmount = (Math.floor(Math.random() * 20) + 5) * 1000000;

@@ -35,6 +35,7 @@ export function Signals({ isCollapsed, onCollapse }: SignalsProps) {
         <div className="flex items-center space-x-2">
           <span className="text-xs text-cyan-400">•</span>
           <span className="text-xs text-gray-400">
+            {/* TODO */}
             Last updates: 50s ago
           </span>
           <ChevronDown 

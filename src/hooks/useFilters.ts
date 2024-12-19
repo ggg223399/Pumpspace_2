@@ -1,41 +1,31 @@
 import { useState, useCallback } from 'react';
 import type { Token } from '../types/token';
 import type { FilterState, FilterRange } from '../types/filter';
+import { useWebSocketSignals } from './useWebSocketSignals';
 
 export function useFilters() {
   const [filters, setFilters] = useState<Record<string, FilterState>>({});
   const [tempFilters, setTempFilters] = useState<Record<string, FilterState>>({});
+  const { signals } = useWebSocketSignals();
 
   const setPresetFilter = useCallback((key: string, value: number) => {
-    setTempFilters(current => {
-      // Special case: value -1 means reset
-      if (value === -1) {
-        const updated = { ...current };
-        delete updated[key];
-        return updated;
-      }
-      
-      const existingFilter = current[key];
-      
-      // If clicking the same preset, remove it
-      if (existingFilter?.type === 'preset' && existingFilter.preset === value) {
-        const updated = { ...current };
-        delete updated[key];
-        return updated;
-      }
-
-      // Set new preset filter
-      return {
-        ...current,
-        [key]: { type: 'preset', preset: value }
-      };
-    });
+    // For avgBuyMC, the preset values are already in thousands
+    setTempFilters(current => ({
+      ...current,
+      [key]: { type: 'preset', preset: value }
+    }));
   }, []);
 
   const setCustomFilter = useCallback((key: string, min: number, max: number) => {
+    // For avgBuyMC, multiply input values by 1000
+    const multiplier = key === 'avgBuyMC' ? 1000 : 1;
     setTempFilters(current => ({
       ...current,
-      [key]: { type: 'custom', min, max }
+      [key]: { 
+        type: 'custom', 
+        min: min * multiplier, 
+        max: max === Infinity ? Infinity : max * multiplier 
+      }
     }));
   }, []);
 
@@ -59,21 +49,35 @@ export function useFilters() {
   const filterTokens = useCallback((tokens: Token[]) => {
     return tokens.filter(token => {
       return Object.entries(filters).every(([key, filter]) => {
-        const value = getTokenValue(token, key);
-        if (value === null) return true;
+        let value: number;
         
+        switch (key) {
+          case 'amount':
+            value = token.smartMoney.length;
+            break;
+          case 'avgBuyMC': {
+            const tokenSignals = signals.filter(s => s.tokenAddress === token.address && s.type === 'buy');
+            if (tokenSignals.length === 0) return false;
+            const totalMC = tokenSignals.reduce((sum, signal) => sum + parseFloat(signal.marketCap), 0);
+            value = totalMC / tokenSignals.length;
+            break;
+          }
+          case 'holders':
+            value = parseInt(token.holders, 10);
+            break;
+          default:
+            return true;
+        }
+
         const range = getFilterRange(filter);
         return value >= range.min && (range.max === Infinity || value <= range.max);
       });
     });
-  }, [filters]);
+  }, [filters, signals]);
 
-  const getFilterRange = useCallback((filter: FilterState): FilterRange => {
-    if (filter.type === 'preset') {
-      return { min: filter.preset!, max: Infinity };
-    }
-    return { min: filter.min!, max: filter.max! };
-  }, []);
+  const isFilterActive = useCallback((key: string) => {
+    return key in filters;
+  }, [filters]);
 
   const isPresetActive = useCallback((key: string, value: number) => {
     const filter = filters[key];
@@ -108,22 +112,16 @@ export function useFilters() {
     applyFilters,
     resetFilter,
     filterTokens,
-    isFilterActive: (key: string) => key in filters,
+    isFilterActive,
     isPresetActive,
     isPresetPending,
     hasPendingChanges
   };
 }
 
-function getTokenValue(token: Token, key: string): number | null {
-  switch (key) {
-    case 'amount':
-      return token.amount;
-    case 'price':
-      return parseFloat(token.price.replace(/[^0-9.]/g, ''));
-    case 'holders':
-      return parseInt(token.holders, 10);
-    default:
-      return null;
+function getFilterRange(filter: FilterState): FilterRange {
+  if (filter.type === 'preset') {
+    return { min: filter.preset!, max: Infinity };
   }
+  return { min: filter.min!, max: filter.max! };
 }

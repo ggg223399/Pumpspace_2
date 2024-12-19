@@ -1,0 +1,170 @@
+src/
+├── components/
+│   ├── common/
+│   │   ├── buttons/
+│   │   │   ├── Button.tsx
+│   │   │   ├── IconButton.tsx 
+│   │   │   └── types.ts
+│   │   ├── inputs/
+│   │   │   ├── TextInput.tsx
+│   │   │   ├── NumberInput.tsx
+│   │   │   └── types.ts
+│   │   ├── loading/
+│   │   │   ├── LoadingSpinner.tsx
+│   │   │   └── LoadingDots.tsx
+│   │   └── icons/
+│   │       ├── common/
+│   │       │   ├── ArrowIcons.tsx
+│   │       │   └── StatusIcons.tsx
+│   │       └── types.ts
+│   ├── layout/
+│   │   ├── header/
+│   │   │   ├── Header.tsx
+│   │   │   ├── HeaderLogo.tsx
+│   │   │   └── HeaderNav.tsx
+│   │   ├── footer/
+│   │   │   ├── Footer.tsx 
+│   │   │   └── FooterLinks.tsx
+│   │   └── sidebar/
+│   │       ├── Sidebar.tsx
+│   │       └── SidebarSection.tsx
+│   ├── filters/
+│   │   ├── smart-money/
+│   │   │   ├── SmartMoneyFilter.tsx
+│   │   │   ├── SmartMoneyPresets.tsx
+│   │   │   └── types.ts
+│   │   ├── holders/
+│   │   │   ├── HoldersFilter.tsx
+│   │   │   ├── HoldersPresets.tsx
+│   │   │   └── types.ts
+│   │   ├── market-cap/
+│   │   │   ├── MarketCapFilter.tsx
+│   │   │   ├── MarketCapPresets.tsx
+│   │   │   └── types.ts
+│   │   └── common/
+│   │       ├── FilterDropdown.tsx
+│   │       ├── FilterIcon.tsx
+│   │       ├── FilterPreset.tsx
+│   │       ├── FilterRange.tsx
+│   │       └── types.ts
+│   ├── tokens/
+│   │   ├── card/
+│   │   │   ├── TokenCard.tsx
+│   │   │   ├── TokenCardHeader.tsx
+│   │   │   └── TokenCardStats.tsx
+│   │   ├── list/
+│   │   │   ├── TokenList.tsx
+│   │   │   ├── TokenListHeader.tsx
+│   │   │   ├── TokenListItem.tsx
+│   │   │   └── types.ts
+│   │   ├── stats/
+│   │   │   ├── TokenPrice.tsx
+│   │   │   ├── TokenVolume.tsx
+│   │   │   └── types.ts
+│   │   └── trading/
+│   │       ├── tools/
+│   │       │   ├── TradingTools.tsx
+│   │       │   ├── TradingToolsMenu.tsx
+│   │       │   └── types.ts
+│   │       └── buttons/
+│   │           ├── BuyButton.tsx
+│   │           ├── SellButton.tsx
+│   │           └── types.ts
+│   └── ui/
+       ├── toast/
+       │   ├── components/
+       │   │   ├── Toast.tsx
+       │   │   └── ToastIcon.tsx
+       │   ├── ToastContainer.tsx
+       │   └── types.ts
+       └── dropdown/
+           ├── components/
+           │   ├── DropdownItem.tsx
+           │   └── DropdownTrigger.tsx
+           ├── Dropdown.tsx
+           └── types.ts
+├── hooks/
+│   ├── common/
+│   │   ├── dom/
+│   │   │   ├── useClickOutside.ts
+│   │   │   └── useWindowSize.ts
+│   │   ├── form/
+│   │   │   ├── useDebounce.ts
+│   │   │   └── useForm.ts
+│   │   └── storage/
+│   │       ├── useLocalStorage.ts
+│   │       └── useSessionStorage.ts
+│   ├── filters/
+│   │   ├── smart-money/
+│   │   │   └── useSmartMoneyFilter.ts
+│   │   ├── holders/
+│   │   │   └── useHoldersFilter.ts
+│   │   └── market-cap/
+│   │       └── useMarketCapFilter.ts
+│   └── tokens/
+       ├── list/
+       │   ├── useTokenList.ts
+       │   └── useTokenPagination.ts
+       ├── sort/
+       │   ├── useTokenSort.ts
+       │   └── types.ts
+       └── stats/
+           ├── useTokenStats.ts
+           └── useTokenMetrics.ts
+├── store/
+│   ├── filters/
+│   │   ├── smart-money/
+│   │   │   ├── store.ts
+│   │   │   └── types.ts
+│   │   ├── holders/
+│   │   │   ├── store.ts
+│   │   │   └── types.ts
+│   │   └── market-cap/
+│   │       ├── store.ts
+│   │       └── types.ts
+│   └── tokens/
+       ├── list/
+       │   ├── store.ts
+       │   └── types.ts
+       └── trading/
+           ├── store.ts
+           └── types.ts
+├── utils/
+│   ├── format/
+│   │   ├── address/
+│   │   │   ├── formatAddress.ts
+│   │   │   └── validateAddress.ts
+│   │   ├── currency/
+│   │   │   ├── formatCurrency.ts
+│   │   │   └── formatPrice.ts
+│   │   └── time/
+│   │       ├── formatTime.ts
+│   │       └── formatDuration.ts
+│   └── helpers/
+       ├── array/
+       │   ├── sort.ts
+       │   └── filter.ts
+       ├── string/
+       │   ├── truncate.ts
+       │   └── capitalize.ts
+       └── number/
+           ├── round.ts
+           └── format.ts
+└── config/
+    ├── api/
+    │   ├── endpoints.ts
+    │   └── constants.ts
+    ├── filters/
+    │   ├── presets.ts
+    │   └── constants.ts
+    └── i18n/
+        ├── translations/
+        │   ├── en/
+        │   │   ├── common.json
+        │   │   ├── filters.json
+        │   │   └── tokens.json
+        │   └── zh/
+        │       ├── common.json
+        │       ├── filters.json
+        │       └── tokens.json
+        └── config.ts

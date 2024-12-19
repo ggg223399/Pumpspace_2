@@ -9,13 +9,8 @@ export interface FilterConfig {
 }
 
 export interface FilterState {
-  type: 'preset' | 'custom';
-  preset?: number;
+  type: 'preset' | 'range';
+  value?: number;
   min?: number;
   max?: number;
-}
-
-export interface FilterRange {
-  min: number;
-  max: number;
 }

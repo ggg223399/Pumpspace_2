@@ -66,7 +66,7 @@ export function TradingToolsMenu({ onClose }: TradingToolsMenuProps) {
                        transition-all duration-200 group
                        ${selectedTool?.id === tool.id
                          ? 'bg-cyan-500/10 text-cyan-400' 
-                         : 'hover:bg-surface/80 text-gray-300'}`}
+                         : 'hover:bg-cyan-500/10 text-gray-300 hover:text-cyan-400'}`}
             >
               <span className="text-lg flex-shrink-0">{tool.icon}</span>
               <span className="flex-1 text-left">{tool.name}</span>

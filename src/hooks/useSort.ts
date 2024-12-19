@@ -1,54 +1,75 @@
 import { useState, useCallback } from 'react';
 import type { Token } from '../types/token';
-import type { SortDirection } from '../components/tokens/SortableHeader';
+import type { SortDirection } from '../types/sort';
+import { useWebSocketSignals } from './useWebSocketSignals';
 
-export function useSort(initialTokens: Token[]) {
+export function useSort() {
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const { signals } = useWebSocketSignals();
 
   const handleSort = useCallback((key: string) => {
     if (sortKey === key) {
-      // Cycle through: null -> desc -> asc -> null
       setSortDirection(current => {
-        if (current === null) return 'desc';    // First click: desc
-        if (current === 'desc') return 'asc';   // Second click: asc
-        return null;                            // Third click: null (reset)
+        if (current === null) return 'desc';
+        if (current === 'desc') return 'asc';
+        return null;
       });
     } else {
-      // New column: start with desc
       setSortKey(key);
       setSortDirection('desc');
     }
 
-    // Reset sortKey only when direction becomes null
     if (sortDirection === 'asc') {
       setSortKey(null);
     }
   }, [sortKey, sortDirection]);
 
-  const getSortedTokens = useCallback((tokens: Token[]) => {
-    if (!sortKey || !sortDirection) return tokens;
+  const getSortedTokens = useCallback((tokens: Token[], pinnedTokens: Set<string>) => {
+    const pinnedTokensList = tokens.filter(token => pinnedTokens.has(token.id));
+    const unpinnedTokensList = tokens.filter(token => !pinnedTokens.has(token.id));
 
-    return [...tokens].sort((a, b) => {
-      let aValue = a[sortKey as keyof Token];
-      let bValue = b[sortKey as keyof Token];
+    const sortTokens = (tokenList: Token[]) => {
+      if (!sortKey || !sortDirection) return tokenList;
 
-      // Convert string numbers to actual numbers
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        if (aValue.startsWith('$')) {
-          aValue = parseFloat(aValue.replace(/[$,K]/g, ''));
-          bValue = parseFloat(bValue.replace(/[$,K]/g, ''));
-        } else if (!isNaN(parseFloat(aValue))) {
-          aValue = parseFloat(aValue);
-          bValue = parseFloat(bValue);
+      return [...tokenList].sort((a, b) => {
+        let aValue: number;
+        let bValue: number;
+
+        switch (sortKey) {
+          case 'amount':
+            aValue = a.smartMoney.length;
+            bValue = b.smartMoney.length;
+            break;
+          case 'avgBuyMC': {
+            // Get buy signals for token A
+            const aSignals = signals.filter(s => s.tokenAddress === a.address && s.type === 'buy');
+            const aTotalMC = aSignals.reduce((sum, signal) => sum + parseFloat(signal.marketCap), 0);
+            aValue = aSignals.length > 0 ? aTotalMC / aSignals.length : 0;
+
+            // Get buy signals for token B
+            const bSignals = signals.filter(s => s.tokenAddress === b.address && s.type === 'buy');
+            const bTotalMC = bSignals.reduce((sum, signal) => sum + parseFloat(signal.marketCap), 0);
+            bValue = bSignals.length > 0 ? bTotalMC / bSignals.length : 0;
+            break;
+          }
+          case 'holders':
+            aValue = parseInt(a.holders, 10);
+            bValue = parseInt(b.holders, 10);
+            break;
+          default:
+            return 0;
         }
-      }
 
-      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-  }, [sortKey, sortDirection]);
+        if (sortDirection === 'asc') {
+          return aValue - bValue;
+        }
+        return bValue - aValue;
+      });
+    };
+
+    return [...sortTokens(pinnedTokensList), ...sortTokens(unpinnedTokensList)];
+  }, [sortKey, sortDirection, signals]);
 
   return {
     sortKey,

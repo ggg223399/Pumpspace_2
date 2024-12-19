@@ -73,10 +73,10 @@ export function BaseFilterDropdown({
   };
 
   const handleApply = () => {
+    onApply();
     if (isResetting) {
       onReset();
     }
-    onApply();
     onClose();
   };
 
